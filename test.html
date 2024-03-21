@@ -10,16 +10,16 @@
 <div id="content" style="display: none;">
   <!-- Your secret content goes here -->
   <h1>Welcome to the Secret Page!</h1>
-  <p>Here's the test code: testonly</p>
+  <p>Here's the test code: testonly:P</p>
 </div>
 
 <script>
 window.onload = function() {
   var referrer = document.referrer;
-  if (referrer.includes("shrinkfly.com")) {
+  if (referrer.includes("shrinkfly.shrinklinker.com")) {
     document.getElementById("content").style.display = "block";
   } else {
-    alert("Sorry, no shortcut please. Access denied.");
+    alert("Sorry, no shortcut please. Access denied. :P");
     // Redirect or perform other actions as needed
   }
 }
