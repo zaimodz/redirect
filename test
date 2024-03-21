@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secret Page</title>
+</head>
+<body>
+    <h1>Welcome to the Secret Page</h1>
+
+    <script>
+        // Function to get URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(window.location.href);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        // Get the referrer URL
+        var referrer = document.referrer;
+
+        // Get the token from the URL parameter
+        var token = getUrlParameter('token');
+
+        // Check if the referrer is shrinkfly.com and token is present
+        if (referrer.includes('shrinkfly.com') && token) {
+            // Allow access
+            document.write("<p>This is the secret content that can only be viewed when redirected from shrinkfly.com.</p>");
+        } else {
+            // Deny access
+            document.write("<p>Access denied.</p>");
+        }
+    </script>
+</body>
+</html>
