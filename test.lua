@@ -101,7 +101,10 @@ gg.toast("𝙰𝙸𝙼 𝙰𝚂𝚂𝙸𝚂𝚃 [𝙰𝙲𝚃𝙸𝚅𝙰𝚃�
 end
 
 function exit()
-os.exit()
+  gg.toast("🔸ʟᴏɢɢɪɴɢ ᴏᴜᴛ sᴄʀɪᴘᴛ🔸")
+  gg.sleep(300)
+  print("🔸ᴛʜᴀɴᴋꜱ ꜰᴏʀ ᴜꜱɪɴɢ ᴍʏ sᴄʀɪᴘᴛ🔸")
+  os.exit()
 end
 
 while true do
