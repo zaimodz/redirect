@@ -23,6 +23,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      position: relative;
     }
 
     #opening {
@@ -36,21 +37,25 @@
       justify-content: center;
       align-items: center;
       z-index: 5;
-      animation: fadeOut 2s ease-in-out forwards;
-      animation-delay: 3s;
+      animation: fadeInOut 6s ease-in-out forwards;
     }
 
     #opening h1 {
       font-size: 48px;
       color: #1e90ff;
       text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-      animation: zoomIn 3s ease-in-out;
+      animation: zoomInOut 3s ease-in-out;
     }
 
-    @keyframes zoomIn {
+    @keyframes zoomInOut {
       0% {
         transform: scale(0);
         opacity: 0;
+      }
+
+      50% {
+        transform: scale(1.2);
+        opacity: 1;
       }
 
       100% {
@@ -59,14 +64,13 @@
       }
     }
 
-    @keyframes fadeOut {
-      0% {
+    @keyframes fadeInOut {
+      0%, 100% {
         opacity: 1;
       }
 
-      100% {
+      50% {
         opacity: 0;
-        visibility: hidden;
       }
     }
 
@@ -124,43 +128,80 @@
       object-fit: cover;
     }
 
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 10;
+    }
+
+    .loader-container {
+      width: 200px;
+      height: 20px;
+      border: 1px solid #ddd;
+      overflow: hidden;
+      position: relative;
+      border-radius: 5px;
+    }
+
+    .loader {
+      width: 10%;
+      height: 100%;
+      background: linear-gradient(90deg, #8f8a8a, #d7d5d5, #fff);
+      animation: loader 3s linear infinite;
+      box-shadow: 0 0 25px #00fffc;
+    }
+
+    @keyframes loader {
+      0% {
+        width: 10%;
+      }
+
+      100% {
+        width: 100%;
+      }
+    }
+
     #video-controls {
       position: fixed;
       bottom: 20px;
-      left: 20px;
+      right: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: calc(100% - 40px);
       z-index: 3;
     }
 
-    .next-button {
+    #video-controls button {
       background-color: #1e90ff;
       color: #ffffff;
       border: none;
       border-radius: 50%;
       cursor: pointer;
       font-size: 24px;
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-      box-shadow: 0 0 0 rgba(30, 144, 255, 0.5);
+      transition: background-color 0.3s, transform 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       font-weight: 600;
     }
 
-    .next-button:hover {
+    #video-controls button:hover {
       background-color: #00bfff;
       transform: scale(1.1);
-      box-shadow: 0 0 20px rgba(30, 144, 255, 0.8);
     }
 
     @media only screen and (max-width: 600px) {
       #video-controls {
-        left: 10px;
+        right: 10px;
         bottom: 10px;
       }
     }
@@ -175,14 +216,20 @@
   <div id="video-container">
     <div id="animated-background"></div>
     <video id="video" controls autoplay></video>
+    <div id="loading">
+      <div class="loader-container">
+        <div class="loader"></div>
+      </div>
+    </div>
   </div>
 
   <div id="video-controls">
-    <button id="next-button" class="next-button">&#187;</button>
+    <button id="next-button">&#187;&#187;&#187;</button>
   </div>
 
   <script>
     const video = document.getElementById('video');
+    const loading = document.getElementById('loading');
     const animatedBackground = document.getElementById('animated-background');
     const nextButton = document.getElementById('next-button');
 
@@ -202,6 +249,7 @@
 
     async function getRandomVideo() {
       try {
+        loading.style.display = 'flex'; // Show loading screen
         const url = 'https://shoti-srv1.onrender.com/api/v1/get';
         const rawResponse = await fetch(url, {
           method: 'POST',
@@ -213,18 +261,23 @@
         const content = await rawResponse.json();
         video.src = content.data.url;
         video.play();
+        video.onloadeddata = () => {
+          loading.style.display = 'none'; // Hide loading screen
+        };
       } catch (e) {
         console.error("Error fetching Shoti video", e);
+        loading.style.display = 'none'; // Hide loading screen on error
       }
     }
 
     getRandomVideo();
 
+    video.addEventListener('ended', getRandomVideo);
+
     nextButton.addEventListener('click', () => {
+      loading.style.display = 'flex'; // Show loading screen
       getRandomVideo();
     });
-
-    video.addEventListener('ended', getRandomVideo);
   </script>
 </body>
 
