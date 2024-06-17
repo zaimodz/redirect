@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SHAWTY VIDEOS</title>
+  <title>Animated Video Player</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -24,42 +24,6 @@
       align-items: center;
       height: 100vh;
       position: relative;
-    }
-
-    #opening {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 10px;
-      text-align: center;
-      opacity: 1;
-      z-index: 5;
-    }
-
-    #opening h1 {
-      font-size: 48px;
-      color: #ff9900; /* Lion orange color */
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-      position: relative;
-      display: inline-block;
-      padding: 10px 20px;
-      border-radius: 15px;
-      background-color: rgba(0, 0, 0, 0.3);
-      opacity: 0.3; /* Adjust opacity to 30% */
-      backdrop-filter: blur(5px); /* Smooth edges with backdrop-filter */
-    }
-
-    #video-container {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
     }
 
     #animated-background {
@@ -131,7 +95,7 @@
       width: 0%;
       height: 100%;
       background: linear-gradient(90deg, #8f8a8a, #d7d5d5, #fff);
-      animation: loader 1.5s linear infinite; /* Faster loading animation */
+      animation: loader 1s linear infinite; /* Faster loading animation */
       box-shadow: 0 0 25px #00fffc;
     }
 
@@ -227,13 +191,15 @@
 </head>
 
 <body>
-  <div id="opening">
-    <h1>SHAWTY VIDEOS</h1>
-  </div>
+  <div id="animated-background"></div>
+
+  <video id="intro-video" autoplay muted>
+    <source src="https://github.com/zaimodz/redirect/raw/main/intro.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
   <div id="video-container">
-    <div id="animated-background"></div>
-    <video id="video" controls autoplay></video>
+    <video id="video" controls></video>
     <div id="loading">
       <div class="loader-container">
         <div class="loader"></div>
@@ -246,11 +212,11 @@
   </div>
 
   <script>
+    const introVideo = document.getElementById('intro-video');
     const video = document.getElementById('video');
     const loading = document.getElementById('loading');
     const animatedBackground = document.getElementById('animated-background');
     const nextButton = document.getElementById('next-button');
-    const opening = document.getElementById('opening');
 
     function createParticles() {
       for (let i = 0; i < 100; i++) {
@@ -268,13 +234,6 @@
 
     async function getRandomVideo() {
       try {
-        opening.style.opacity = 1; // Show opening
-        opening.style.display = 'block';
-
-        setTimeout(() => {
-          opening.style.opacity = 0; // Fade out opening
-        }, 1500);
-
         loading.style.display = 'flex'; // Show loading screen
         const url = 'https://shoti-srv1.onrender.com/api/v1/get';
         const rawResponse = await fetch(url, {
@@ -299,6 +258,13 @@
     nextButton.addEventListener('click', () => {
       loading.style.display = 'flex'; // Show loading screen
       getRandomVideo();
+    });
+
+    // Play intro video once on page load
+    introVideo.addEventListener('ended', () => {
+      introVideo.style.display = 'none'; // Hide intro video once it ends
+      video.style.display = 'block'; // Show main video player
+      getRandomVideo(); // Load the first random video after intro
     });
   </script>
 </body>
