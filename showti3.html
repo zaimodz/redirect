@@ -123,6 +123,10 @@
       position: fixed;
       bottom: 20px;
       left: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: calc(100% - 40px);
       z-index: 3;
     }
 
@@ -143,6 +147,14 @@
     #video-controls button:hover {
       background-color: #00bfff;
       transform: scale(1.1);
+    }
+
+    #exit-button {
+      display: none;
+    }
+
+    #exit-button.active {
+      display: inline-block;
     }
 
     #loading {
@@ -198,12 +210,15 @@
 
   <div id="video-controls">
     <button id="next-button">&#9654; Next</button>
+    <button id="exit-button" class="active">Exit</button>
   </div>
 
   <script>
     const video = document.getElementById('video');
     const loading = document.getElementById('loading');
     const animatedBackground = document.getElementById('animated-background');
+    const exitButton = document.getElementById('exit-button');
+    const nextButton = document.getElementById('next-button');
 
     function createParticles() {
       for (let i = 0; i < 100; i++) {
@@ -255,13 +270,23 @@
 
     getRandomVideo();
 
-    document.getElementById('next-button').addEventListener('click', () => {
+    nextButton.addEventListener('click', () => {
       loading.style.display = 'block';
       loading.classList.add('loading-animation');
       getRandomVideo();
     });
 
     video.addEventListener('ended', getRandomVideo);
+
+    exitButton.addEventListener('click', () => {
+      if (exitButton.textContent === 'Exit') {
+        video.exitFullscreen();
+        exitButton.textContent = 'Next';
+      } else {
+        video.requestFullscreen();
+        exitButton.textContent = 'Exit';
+      }
+    });
 
     window.addEventListener('resize', adjustVideoSize);
   </script>
