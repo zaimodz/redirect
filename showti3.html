@@ -159,11 +159,24 @@
       z-index: 3;
     }
 
-    @keyframes loadingAnimation {
-      0% { content: "Loading"; }
-      33% { content: "Loading."; }
-      66% { content: "Loading.."; }
-      100% { content: "Loading..."; }
+    #loading.loading-animation::after {
+      content: "";
+      animation: loadingText 1s infinite;
+    }
+
+    @keyframes loadingText {
+      0% {
+        content: "Loading";
+      }
+      33% {
+        content: "Loading.";
+      }
+      66% {
+        content: "Loading..";
+      }
+      100% {
+        content: "Loading...";
+      }
     }
 
     @media only screen and (max-width: 600px) {
@@ -211,6 +224,7 @@
     async function getRandomVideo() {
       try {
         loading.style.display = 'block';
+        loading.classList.add('loading-animation');
         const url = 'https://shoti-srv1.onrender.com/api/v1/get';
         const rawResponse = await fetch(url, {
           method: 'POST',
@@ -223,11 +237,13 @@
         video.src = content.data.url;
         video.onloadeddata = () => {
           loading.style.display = 'none';
+          loading.classList.remove('loading-animation');
           adjustVideoSize();
         };
       } catch (e) {
         console.error("Error fetching Shoti video", e);
         loading.style.display = 'none';
+        loading.classList.remove('loading-animation');
       }
     }
 
@@ -241,7 +257,11 @@
 
     getRandomVideo();
 
-    document.getElementById('next-button').addEventListener('click', getRandomVideo);
+    document.getElementById('next-button').addEventListener('click', () => {
+      loading.style.display = 'block';
+      loading.classList.add('loading-animation');
+      getRandomVideo();
+    });
 
     document.getElementById('fullscreen-button').addEventListener('click', () => {
       if (video.requestFullscreen) {
