@@ -31,12 +31,11 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.7);
       padding: 20px;
+      background: rgba(0, 0, 0, 0.7);
       border-radius: 10px;
       text-align: center;
-      opacity: 0;
-      animation: fadeInOut 2s ease-in-out forwards;
+      opacity: 1;
       z-index: 5;
     }
 
@@ -44,20 +43,13 @@
       font-size: 48px;
       color: #ff9900; /* Lion orange color */
       text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-    }
-
-    @keyframes fadeInOut {
-      0% {
-        opacity: 0;
-      }
-
-      10%, 90% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0;
-      }
+      position: relative;
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 15px;
+      background-color: rgba(0, 0, 0, 0.3);
+      opacity: 0.3; /* Adjust opacity to 30% */
+      backdrop-filter: blur(5px); /* Smooth edges with backdrop-filter */
     }
 
     #video-container {
@@ -136,16 +128,16 @@
     }
 
     .loader {
-      width: 0%; /* Changed initial width to 0% */
+      width: 0%;
       height: 100%;
       background: linear-gradient(90deg, #8f8a8a, #d7d5d5, #fff);
-      animation: loader 3s linear infinite;
+      animation: loader 1.5s linear infinite; /* Faster loading animation */
       box-shadow: 0 0 25px #00fffc;
     }
 
     @keyframes loader {
       0% {
-        width: 0%; /* Start from 0% width */
+        width: 0%;
       }
 
       100% {
@@ -197,14 +189,14 @@
     #next-button::after {
       content: '';
       position: absolute;
-      width: 100%;
-      height: 100%;
+      width: calc(100% + 6px);
+      height: calc(100% + 6px);
       border: 2px solid #ff9900; /* Lion orange color */
-      top: 0;
-      left: 0;
-      border-radius: 50%;
+      top: -3px;
+      left: -3px;
+      border-radius: 15px; /* Matching border-radius to the "SHAWTY VIDEOS" box */
       box-sizing: border-box;
-      animation: neon-animation 1.5s linear infinite;
+      animation: neon-animation 2s linear infinite; /* Slower neon animation */
     }
 
     @keyframes neon-animation {
@@ -216,7 +208,7 @@
 
       50% {
         transform: scale(1.05);
-        opacity: 0.7; /* Reduced opacity for a subtle effect */
+        opacity: 0.8; /* Increased visibility */
       }
     }
 
