@@ -120,15 +120,13 @@
     }
 
     #video-controls {
-      position: absolute;
+      position: fixed;
       bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 100%;
-      max-width: 600px; /* Limit width for better layout */
+      width: calc(100% - 40px);
       z-index: 3;
     }
 
@@ -141,15 +139,15 @@
       font-size: 16px;
       padding: 12px 24px;
       margin-bottom: 10px;
-      transition: background-color 0.3s, transform 0.3s;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 0 rgba(30, 144, 255, 0.5);
       font-weight: 600;
-      z-index: 4; /* Ensure buttons are above video */
     }
 
     #video-controls button:hover {
       background-color: #00bfff;
       transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(30, 144, 255, 0.8);
     }
 
     #exit-button {
@@ -194,6 +192,7 @@
 
     @media only screen and (max-width: 600px) {
       #video-controls {
+        left: 10px;
         bottom: 10px;
       }
     }
@@ -208,18 +207,19 @@
     <div id="animated-background"></div>
     <video id="video" controls autoplay></video>
     <div id="loading" class="loading-animation"></div>
-    <div id="video-controls">
-      <button id="next-button">&#9654; Next</button>
-      <button id="toggle-fullscreen">&#x26F6; Fullscreen</button>
-    </div>
+  </div>
+
+  <div id="video-controls">
+    <button id="next-button">&#9654; Next</button>
+    <button id="exit-button" class="active">Exit</button>
   </div>
 
   <script>
     const video = document.getElementById('video');
     const loading = document.getElementById('loading');
     const animatedBackground = document.getElementById('animated-background');
+    const exitButton = document.getElementById('exit-button');
     const nextButton = document.getElementById('next-button');
-    const toggleFullscreenButton = document.getElementById('toggle-fullscreen');
 
     function createParticles() {
       for (let i = 0; i < 100; i++) {
@@ -275,33 +275,13 @@
 
     video.addEventListener('ended', getRandomVideo);
 
-    let isFullscreen = false;
-
-    toggleFullscreenButton.addEventListener('click', () => {
-      if (!isFullscreen) {
-        if (video.requestFullscreen) {
-          video.requestFullscreen();
-        } else if (video.mozRequestFullScreen) { /* Firefox */
-          video.mozRequestFullScreen();
-        } else if (video.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-          video.webkitRequestFullscreen();
-        } else if (video.msRequestFullscreen) { /* IE/Edge */
-          video.msRequestFullscreen();
-        }
-        toggleFullscreenButton.textContent = 'Exit';
-        isFullscreen = true;
+    exitButton.addEventListener('click', () => {
+      if (exitButton.textContent === 'Exit') {
+        document.exitFullscreen();
+        exitButton.textContent = 'Next';
       } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) { /* Firefox */
-          document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
-          document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { /* IE/Edge */
-          document.msExitFullscreen();
-        }
-        toggleFullscreenButton.textContent = 'Fullscreen';
-        isFullscreen = false;
+        video.requestFullscreen();
+        exitButton.textContent = 'Exit';
       }
     });
 
