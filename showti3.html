@@ -14,9 +14,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Poppins', sans-serif;
-      background-image: url('https://i.ibb.co/6t7yVhf/received-379631534890547.jpg');
-      background-size: cover;
-      background-attachment: fixed;
+      background: linear-gradient(135deg, #007BFF 0%, #00CFFF 100%);
       color: #ffffff;
       line-height: 1.6;
     }
@@ -25,8 +23,8 @@
       text-align: center;
       margin: 30px 0;
       font-size: 36px;
-      color: #bb86fc;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      color: #ffffff;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
       font-weight: 600;
     }
 
@@ -35,10 +33,10 @@
       width: 90%;
       margin: auto;
       margin-top: 20px;
-      background: linear-gradient(145deg, #1e1e1e, #2c2c2c);
+      background: #ffffff;
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
     video {
@@ -53,14 +51,14 @@
       justify-content: center;
       align-items: center;
       padding: 15px;
-      background-color: rgba(0, 0, 0, 0.3);
+      background-color: #007BFF;
       border-bottom-left-radius: 20px;
       border-bottom-right-radius: 20px;
     }
 
     #video-controls button {
-      background-color: #bb86fc;
-      color: #121212;
+      background-color: #ffffff;
+      color: #007BFF;
       border: none;
       border-radius: 25px;
       cursor: pointer;
@@ -68,12 +66,12 @@
       padding: 12px 24px;
       margin: 0 15px;
       transition: background-color 0.3s, transform 0.3s;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       font-weight: 600;
     }
 
     #video-controls button:hover {
-      background-color: #9b6bcc;
+      background-color: #e0e0e0;
       transform: scale(1.1);
     }
 
@@ -81,7 +79,23 @@
       text-align: center;
       margin-top: 20px;
       font-size: 14px;
-      color: #999;
+      color: #ffffff;
+    }
+
+    #loading-spinner {
+      display: none;
+      margin: 20px auto;
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #007BFF;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     @media only screen and (max-width: 600px) {
@@ -99,6 +113,8 @@
     <video id="video" controls autoplay></video>
   </div>
 
+  <div id="loading-spinner"></div>
+
   <div id="video-controls">
     <button id="next-button">&#9654; Next</button>
     <button id="fullscreen-button">&#x26F6; Fullscreen</button>
@@ -110,6 +126,8 @@
 
   <script>
     async function getRandomVideo() {
+      document.getElementById('loading-spinner').style.display = 'block';
+      document.getElementById('video').style.display = 'none';
       try {
         const url = 'https://shoti-srv1.onrender.com/api/v1/get';
         const rawResponse = await fetch(url, {
@@ -124,6 +142,8 @@
       } catch (e) {
         console.error("Error fetching Shoti video", e);
       }
+      document.getElementById('loading-spinner').style.display = 'none';
+      document.getElementById('video').style.display = 'block';
     }
 
     getRandomVideo();
