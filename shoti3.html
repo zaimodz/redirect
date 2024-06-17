@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Shoti</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0e0eb;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 {
+            margin-top: 20px;
+            font-size: 2em;
+            color: #007bff;
+        }
+        #video-container {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            position: relative;
+        }
+        video {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+        #loading-spinner {
+            display: none;
+            text-align: center;
+            font-size: 2em;
+            padding: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+        }
+        #error-message {
+            display: none;
+            color: red;
+            text-align: center;
+            padding: 10px;
+        }
+        #retry-button, #next-button, #play-pause-button {
+            display: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        #retry-button:hover, #next-button:hover, #play-pause-button:hover {
+            background-color: #0056b3;
+        }
+        #progress-bar-container {
+            display: none;
+            width: 100%;
+            background-color: #f3f3f3;
+        }
+        #progress-bar {
+            width: 0;
+            height: 5px;
+            background-color: #4caf50;
+            transition: width 0.2s;
+        }
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #555;
+            font-size: 0.9em;
+        }
+        @media (max-width: 600px) {
+            #video-container {
+                width: 100%;
+            }
+            #loading-spinner {
+                font-size: 1.5em;
+            }
+            #retry-button, #next-button, #play-pause-button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Random Shoti</h1>
+    <div id="video-container">
+        <div id="loading-spinner"><i class="fas fa-spinner fa-spin"></i></div>
+        <video id="video" controls></video>
+    </div>
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
+    <div id="error-message"></div>
+    <button id="retry-button"><i class="fas fa-redo"></i> Retry</button>
+    <button id="next-button"><i class="fas fa-step-forward"></i> Next Video</button>
+    <button id="play-pause-button"><i class="fas fa-play"></i> Play</button>
+
+    <footer>© 2024 | Zai | All rights reserved.</footer>
+
+    <script>
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const errorMessage = document.getElementById('error-message');
+        const videoElement = document.getElementById('video');
+        const retryButton = document.getElementById('retry-button');
+        const nextButton = document.getElementById('next-button');
+        const playPauseButton = document.getElementById('play-pause-button');
+        const progressBar = document.getElementById('progress-bar');
+        const progressBarContainer = document.getElementById('progress-bar-container');
+        const videoTimeout = 10000;
+
+        async function getRandomVideo() {
+            try {
+                loadingSpinner.style.display = 'block';
+                progressBar.style.width = '0';
+                progressBarContainer.style.display = 'block';
+                errorMessage.style.display = 'none';
+                retryButton.style.display = 'none';
+                nextButton.style.display = 'none';
+                playPauseButton.style.display = 'none';
+                videoElement.style.display = 'none';
+                errorMessage.style.opacity = '0';
+                retryButton.style.opacity = '0';
+
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress = Math.min(progress + 1, 100);
+                    progressBar.style.width = `${progress}%`;
+                }, videoTimeout / 100);
+
+                const response = await fetch('https://randomvideourlapi.com/video'); // replace with your API endpoint
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                const videoUrl = data.url; // assume API returns a JSON object with a "url" field
+                videoElement.src = videoUrl;
+
+                clearInterval(progressInterval);
+                loadingSpinner.style.display = 'none';
+                videoElement.style.display = 'block';
+                videoElement.play();
+
+                playPauseButton.innerHTML = '<i class="fas fa-pause"></i> Pause';
+                playPauseButton.style.display = 'block';
+                nextButton.style.display = 'block';
+
+            } catch (error) {
+                clearInterval(progressInterval);
+                loadingSpinner.style.display = 'none';
+                progressBarContainer.style.display = 'none';
+                errorMessage.textContent = 'Failed to load video. Please try again.';
+                errorMessage.style.display = 'block';
+                errorMessage.style.opacity = '1';
+                retryButton.style.display = 'block';
+                retryButton.style.opacity = '1';
+            }
+        }
+
+        retryButton.addEventListener('click', getRandomVideo);
+        nextButton.addEventListener('click', getRandomVideo);
+        playPauseButton.addEventListener('click', () => {
+            if (videoElement.paused) {
+                videoElement.play();
+                playPauseButton.innerHTML = '<i class="fas fa-pause"></i> Pause';
+            } else {
+                videoElement.pause();
+                playPauseButton.innerHTML = '<i class="fas fa-play"></i> Play';
+            }
+        });
+
+        window.onload = getRandomVideo;
+    </script>
+</body>
+</html>
