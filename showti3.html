@@ -68,7 +68,6 @@
       height: auto;
       min-height: 100%;
       object-fit: cover;
-      display: none; /* Initially hide main video player */
     }
 
     #loading {
@@ -194,13 +193,8 @@
 <body>
   <div id="animated-background"></div>
 
-  <video id="intro-video" autoplay muted width="320">
-    <source src="https://github.com/zaimodz/redirect/raw/main/intro.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-
   <div id="video-container">
-    <video id="video" controls></video>
+    <video id="video" controls autoplay></video>
     <div id="loading">
       <div class="loader-container">
         <div class="loader"></div>
@@ -213,7 +207,6 @@
   </div>
 
   <script>
-    const introVideo = document.getElementById('intro-video');
     const video = document.getElementById('video');
     const loading = document.getElementById('loading');
     const animatedBackground = document.getElementById('animated-background');
@@ -260,16 +253,6 @@
       loading.style.display = 'flex'; // Show loading screen
       getRandomVideo();
     });
-
-    // Play intro video once on page load
-    introVideo.addEventListener('ended', () => {
-      introVideo.style.display = 'none'; // Hide intro video once it ends
-      video.style.display = 'block'; // Show main video player
-      getRandomVideo(); // Load the first random video after intro
-    });
-
-    // Ensure intro video starts playing automatically
-    introVideo.play();
   </script>
 </body>
 
