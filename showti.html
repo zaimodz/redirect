@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHAWTY VIDEOS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background-image: url('https://i.ibb.co/6t7yVhf/received-379631534890547.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      color: #ffffff;
+      line-height: 1.6;
+    }
+
+    #title {
+      text-align: center;
+      margin: 30px 0;
+      font-size: 36px;
+      color: #bb86fc;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      font<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHAWTY VIDEOS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background-image: url('https://i.ibb.co/6t7yVhf/received-379631534890547.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      color: #ffffff;
+      line-height: 1.6;
+    }
+
+    #title {
+      text-align: center;
+      margin: 30px 0;
+      font-size: 36px;
+      color: #bb86fc;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      font-weight: 600;
+    }
+
+    #video-container {
+      max-width: 900px;
+      width: 90%;
+      margin: auto;
+      margin-top: 20px;
+      background: linear-gradient(145deg, #1e1e1e, #2c2c2c);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+-weight: 600;
+    }
+
+    #video-container {
+      max-width: 900px;
+      width: 90%;
+      margin: auto;
+      margin-top: 20px;
+      background: linear-gradient(145deg, #1e1e1e, #2c2c2c);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 20px 20px 0 0;
+    }
+
+    #video-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+
+    #video-controls button {
+      background-color: #bb86fc;
+      color: #121212;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 12px 24px;
+      margin: 0 15px;
+      transition: background-color 0.3s, transform 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      font-weight: 600;
+    }
+
+    #video-controls button:hover {
+      background-color: #9b6bcc;
+      transform: scale(1.1);
+    }
+
+    #footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #999;
+    }
+
+    @media only screen and (max-width: 600px) {
+      #video-container {
+        width: 100%;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">SHAWTY VIDEOS</h1>
+
+  <div id="video-container">
+    <video id="video" controls autoplay></video>
+  </div>
+
+  <div id="video-controls">
+    <button id="next-button">&#9654; Next</button>
+    <button id="fullscreen-button">&#x26F6; Fullscreen</button>
+  </div>
+
+  <div id="footer">
+    JABOL NA
+  </div>
+
+  <script>
+    async function getRandomVideo() {
+      try {
+        const url = 'https://shoti-srv1.onrender.com/api/v1/get';
+        const rawResponse = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ apikey: "shoti-1hgn30msgapp542i0qg" })
+        });
+        const content = await rawResponse.json();
+        document.getElementById('video').src = content.data.url;
+      } catch (e) {
+        console.error("Error fetching Shoti video", e);
+      }
+    }
+
+    getRandomVideo();
+
+    document.getElementById('next-button').addEventListener('click', getRandomVideo);
+
+    document.getElementById('fullscreen-button').addEventListener('click', () => {
+      const video = document.getElementById('video');
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.mozRequestFullScreen) {
+        video.mozRequestFullScreen();
+      } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen();
+      } else if (video.msRequestFullscreen) {
+        video.msRequestFullscreen();
+      }
+    });
+
+    document.getElementById('video').addEventListener('ended', getRandomVideo);
+  </script>
+</body>
+</html>
