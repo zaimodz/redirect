@@ -14,9 +14,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Poppins', sans-serif;
-      background-image: url('https://i.ibb.co/6t7yVhf/received-379631534890547.jpg');
-      background-size: cover;
-      background-attachment: fixed;
+      background-color: #ffffff; /* Changed background to white */
       color: #ffffff;
       line-height: 1.6;
     }
@@ -31,37 +29,22 @@
     }
 
     #video-container {
-      max-width: 900px;
-      width: 90%;
-      margin: auto;
-      margin-top: 20px;
-      background: linear-gradient(145deg, #1e1e1e, #2c2c2c);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
--weight: 600;
-    }
-
-    #video-container {
-      max-width: 900px;
-      width: 90%;
-      margin: auto;
-      margin-top: 20px;
-      background: linear-gradient(145deg, #1e1e1e, #2c2c2c);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative; /* Added relative positioning */
+      width: 100%;
+      height: 100vh; /* Full viewport height */
     }
 
     video {
       width: 100%;
-      height: auto;
+      height: 100%;
       display: block;
       border-radius: 20px 20px 0 0;
     }
 
     #video-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 20px; /* Positioned at bottom left */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -89,16 +72,11 @@
 
     #footer {
       text-align: center;
-      margin-top: 20px;
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
       font-size: 14px;
       color: #999;
-    }
-
-    @media only screen and (max-width: 600px) {
-      #video-container {
-        width: 100%;
-        border-radius: 0;
-      }
     }
   </style>
 </head>
@@ -129,6 +107,15 @@
         });
         const content = await rawResponse.json();
         document.getElementById('video').src = content.data.url;
+
+        // Loading animation cycling
+        document.getElementById('next-button').textContent = "Loading.";
+        await new Promise(resolve => setTimeout(resolve, 500));
+        document.getElementById('next-button').textContent = "Loading..";
+        await new Promise(resolve => setTimeout(resolve, 500));
+        document.getElementById('next-button').textContent = "Loading...";
+        await new Promise(resolve => setTimeout(resolve, 500));
+
       } catch (e) {
         console.error("Error fetching Shoti video", e);
       }
