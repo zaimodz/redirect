@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,6 +52,7 @@
         transform: scale(0);
         opacity: 0;
       }
+
       100% {
         transform: scale(1);
         opacity: 1;
@@ -61,6 +63,7 @@
       0% {
         opacity: 1;
       }
+
       100% {
         opacity: 0;
         visibility: hidden;
@@ -101,9 +104,11 @@
         transform: translateY(100vh) scale(0);
         opacity: 0;
       }
+
       50% {
         opacity: 1;
       }
+
       100% {
         transform: translateY(-100vh) scale(1);
         opacity: 0;
@@ -153,38 +158,6 @@
       box-shadow: 0 0 20px rgba(30, 144, 255, 0.8);
     }
 
-    #loading {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 24px;
-      color: #fff;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      z-index: 3;
-    }
-
-    #loading.loading-animation::after {
-      content: "";
-      animation: loadingText 1s infinite;
-    }
-
-    @keyframes loadingText {
-      0% {
-        content: "Loading";
-      }
-      33% {
-        content: "Loading.";
-      }
-      66% {
-        content: "Loading..";
-      }
-      100% {
-        content: "Loading...";
-      }
-    }
-
     @media only screen and (max-width: 600px) {
       #video-controls {
         left: 10px;
@@ -193,6 +166,7 @@
     }
   </style>
 </head>
+
 <body>
   <div id="opening">
     <h1>SHAWTY VIDEOS</h1>
@@ -201,16 +175,14 @@
   <div id="video-container">
     <div id="animated-background"></div>
     <video id="video" controls autoplay></video>
-    <div id="loading" class="loading-animation"></div>
   </div>
 
   <div id="video-controls">
-    <button id="next-button" class="next-button">&#9654;</button>
+    <button id="next-button" class="next-button">&#187;</button>
   </div>
 
   <script>
     const video = document.getElementById('video');
-    const loading = document.getElementById('loading');
     const animatedBackground = document.getElementById('animated-background');
     const nextButton = document.getElementById('next-button');
 
@@ -230,7 +202,6 @@
 
     async function getRandomVideo() {
       try {
-        loading.style.display = 'block';
         const url = 'https://shoti-srv1.onrender.com/api/v1/get';
         const rawResponse = await fetch(url, {
           method: 'POST',
@@ -241,34 +212,20 @@
         });
         const content = await rawResponse.json();
         video.src = content.data.url;
-        video.onloadeddata = () => {
-          loading.style.display = 'none';
-          adjustVideoSize();
-        };
+        video.play();
       } catch (e) {
         console.error("Error fetching Shoti video", e);
-        loading.style.display = 'none';
-      }
-    }
-
-    function adjustVideoSize() {
-      if (video.videoWidth > video.videoHeight) {
-        video.style.objectFit = 'contain';
-      } else {
-        video.style.objectFit = 'cover';
       }
     }
 
     getRandomVideo();
 
     nextButton.addEventListener('click', () => {
-      loading.style.display = 'block';
       getRandomVideo();
     });
 
     video.addEventListener('ended', getRandomVideo);
-
-    window.addEventListener('resize', adjustVideoSize);
   </script>
 </body>
+
 </html>
