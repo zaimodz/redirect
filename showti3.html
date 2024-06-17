@@ -232,12 +232,12 @@
 </head>
 
 <body>
-  <video id="intro-video" autoplay muted>
-    <source src="https://github.com/zaimodz/redirect/raw/main/intro.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-
   <div id="opening">
+    <video id="intro-video" autoplay muted loop>
+      <source src="https://github.com/zaimodz/redirect/raw/main/intro.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
 
   <div id="video-container">
     <div id="animated-background"></div>
@@ -261,13 +261,10 @@
     const opening = document.getElementById('opening');
     let introVideoEnded = false;
 
-    // Show introductory video first
+    // Hide the opening video and show the main content
     introVideo.addEventListener('ended', () => {
       introVideo.style.display = 'none'; // Hide intro video
-      opening.style.display = 'block'; // Show "SHAWTY VIDEOS" opening
-      opening.addEventListener('animationend', () => {
-        opening.style.display = 'none'; // Hide "SHAWTY VIDEOS" after animation
-      });
+      opening.style.display = 'none'; // Hide the opening div
       getRandomVideo(); // Load first video after intro
       introVideoEnded = true;
     });
