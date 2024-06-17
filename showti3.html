@@ -170,14 +170,14 @@
     #video-controls {
       position: fixed;
       bottom: 20px;
-      right: 20px;
+      left: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 3;
     }
 
-    #video-controls button {
+    #next-button {
       background-color: #1e90ff;
       color: #ffffff;
       border: none;
@@ -192,16 +192,56 @@
       transition: background-color 0.3s, transform 0.3s;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       font-weight: 600;
+      position: relative;
+      overflow: hidden;
     }
 
-    #video-controls button:hover {
+    #next-button::before {
+      content: '>>>';
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    }
+
+    #next-button::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 2px solid #1e90ff;
+      top: 0;
+      left: 0;
+      border-radius: 50%;
+      box-sizing: border-box;
+      animation: neon-animation 1.5s linear infinite;
+    }
+
+    @keyframes neon-animation {
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    #next-button:hover {
       background-color: #00bfff;
       transform: scale(1.1);
     }
 
     @media only screen and (max-width: 600px) {
       #video-controls {
-        right: 10px;
+        left: 10px;
         bottom: 10px;
       }
     }
@@ -224,7 +264,7 @@
   </div>
 
   <div id="video-controls">
-    <button id="next-button">&#187;&#187;&#187;</button>
+    <button id="next-button"></button>
   </div>
 
   <script>
@@ -269,10 +309,6 @@
         loading.style.display = 'none'; // Hide loading screen on error
       }
     }
-
-    getRandomVideo();
-
-    video.addEventListener('ended', getRandomVideo);
 
     nextButton.addEventListener('click', () => {
       loading.style.display = 'flex'; // Show loading screen
