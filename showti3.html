@@ -86,7 +86,7 @@
 
     #loading {
       position: fixed;
-      top: 50%;
+      top: 60%;
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 24px;
@@ -109,7 +109,7 @@
       width: 0%;
       height: 100%;
       background: linear-gradient(90deg, #8f8a8a, #d7d5d5, #fff);
-      animation: loader 0.5s linear infinite; /* Faster loading animation */
+      animation: loader 1s linear infinite; /* Slower loading animation */
       box-shadow: 0 0 25px #00fffc;
     }
 
@@ -118,8 +118,48 @@
         width: 0%;
       }
 
+      25% {
+        width: 25%;
+      }
+
+      50% {
+        width: 50%;
+      }
+
+      75% {
+        width: 75%;
+      }
+
       100% {
         width: 100%;
+      }
+    }
+
+    .loading-text {
+      display: inline-block;
+      margin-left: 8px;
+      animation: loadingText 2s infinite steps(1, end); /* Loading text animation */
+    }
+
+    @keyframes loadingText {
+      0% {
+        content: "Loading";
+      }
+
+      25% {
+        content: "Loading.";
+      }
+
+      50% {
+        content: "Loading..";
+      }
+
+      75% {
+        content: "Loading...";
+      }
+
+      100% {
+        content: "Loading";
       }
     }
 
@@ -202,6 +242,7 @@
       <div class="loader-container">
         <div class="loader"></div>
       </div>
+      <span class="loading-text"></span>
     </div>
   </div>
 
