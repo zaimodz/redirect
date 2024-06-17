@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Animated Video Player</title>
+  <title>SHAWTY VIDEOS</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -24,6 +24,42 @@
       align-items: center;
       height: 100vh;
       position: relative;
+    }
+
+    #opening {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      text-align: center;
+      opacity: 1;
+      z-index: 5;
+    }
+
+    #opening h1 {
+      font-size: 48px;
+      color: #ff9900; /* Lion orange color */
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      position: relative;
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 15px;
+      background-color: rgba(0, 0, 0, 0.3);
+      opacity: 0.3; /* Adjust opacity to 30% */
+      backdrop-filter: blur(5px); /* Smooth edges with backdrop-filter */
+    }
+
+    #video-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
     }
 
     #animated-background {
@@ -95,7 +131,7 @@
       width: 0%;
       height: 100%;
       background: linear-gradient(90deg, #8f8a8a, #d7d5d5, #fff);
-      animation: loader 1s linear infinite; /* Faster loading animation */
+      animation: loader 1.5s linear infinite; /* Faster loading animation */
       box-shadow: 0 0 25px #00fffc;
     }
 
@@ -160,20 +196,6 @@
       left: -3px;
       border-radius: 15px; /* Matching border-radius to the "SHAWTY VIDEOS" box */
       box-sizing: border-box;
-      animation: neon-animation 2s linear infinite; /* Slower neon animation */
-    }
-
-    @keyframes neon-animation {
-      0%,
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-
-      50% {
-        transform: scale(1.05);
-        opacity: 0.8; /* Increased visibility */
-      }
     }
 
     #next-button:hover {
@@ -191,9 +213,12 @@
 </head>
 
 <body>
-  <div id="animated-background"></div>
+  <div id="opening">
+    <h1>SHAWTY VIDEOS</h1>
+  </div>
 
   <div id="video-container">
+    <div id="animated-background"></div>
     <video id="video" controls autoplay></video>
     <div id="loading">
       <div class="loader-container">
@@ -209,25 +234,12 @@
   <script>
     const video = document.getElementById('video');
     const loading = document.getElementById('loading');
-    const animatedBackground = document.getElementById('animated-background');
     const nextButton = document.getElementById('next-button');
-
-    function createParticles() {
-      for (let i = 0; i < 100; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.width = `${Math.random() * 10 + 5}px`;
-        particle.style.height = particle.style.width;
-        particle.style.left = `${Math.random() * 100}vw`;
-        particle.style.animationDelay = `${Math.random() * 20}s`;
-        animatedBackground.appendChild(particle);
-      }
-    }
-
-    createParticles();
+    const opening = document.getElementById('opening');
 
     async function getRandomVideo() {
       try {
+        opening.style.display = 'none'; // Hide "SHAWTY VIDEOS"
         loading.style.display = 'flex'; // Show loading screen
         const url = 'https://shoti-srv1.onrender.com/api/v1/get';
         const rawResponse = await fetch(url, {
