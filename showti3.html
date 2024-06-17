@@ -120,13 +120,15 @@
     }
 
     #video-controls {
-      position: fixed;
+      position: absolute;
       bottom: 20px;
-      left: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: calc(100% - 40px);
+      width: 100%;
+      max-width: 600px; /* Limit width for better layout */
       z-index: 3;
     }
 
@@ -142,6 +144,7 @@
       transition: background-color 0.3s, transform 0.3s;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       font-weight: 600;
+      z-index: 4; /* Ensure buttons are above video */
     }
 
     #video-controls button:hover {
@@ -191,7 +194,6 @@
 
     @media only screen and (max-width: 600px) {
       #video-controls {
-        left: 10px;
         bottom: 10px;
       }
     }
@@ -206,11 +208,10 @@
     <div id="animated-background"></div>
     <video id="video" controls autoplay></video>
     <div id="loading" class="loading-animation"></div>
-  </div>
-
-  <div id="video-controls">
-    <button id="next-button">&#9654; Next</button>
-    <button id="toggle-fullscreen">&#x26F6; Fullscreen</button>
+    <div id="video-controls">
+      <button id="next-button">&#9654; Next</button>
+      <button id="toggle-fullscreen">&#x26F6; Fullscreen</button>
+    </div>
   </div>
 
   <script>
