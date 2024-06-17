@@ -205,20 +205,20 @@
   <div id="video-container">
     <div id="animated-background"></div>
     <video id="video" controls autoplay></video>
-    <div id="loading"></div>
+    <div id="loading" class="loading-animation"></div>
   </div>
 
   <div id="video-controls">
     <button id="next-button">&#9654; Next</button>
-    <button id="exit-button" class="active">Exit</button>
+    <button id="toggle-fullscreen">&#x26F6; Fullscreen</button>
   </div>
 
   <script>
     const video = document.getElementById('video');
     const loading = document.getElementById('loading');
     const animatedBackground = document.getElementById('animated-background');
-    const exitButton = document.getElementById('exit-button');
     const nextButton = document.getElementById('next-button');
+    const toggleFullscreenButton = document.getElementById('toggle-fullscreen');
 
     function createParticles() {
       for (let i = 0; i < 100; i++) {
@@ -237,7 +237,6 @@
     async function getRandomVideo() {
       try {
         loading.style.display = 'block';
-        loading.classList.add('loading-animation');
         const url = 'https://shoti-srv1.onrender.com/api/v1/get';
         const rawResponse = await fetch(url, {
           method: 'POST',
@@ -250,13 +249,11 @@
         video.src = content.data.url;
         video.onloadeddata = () => {
           loading.style.display = 'none';
-          loading.classList.remove('loading-animation');
           adjustVideoSize();
         };
       } catch (e) {
         console.error("Error fetching Shoti video", e);
         loading.style.display = 'none';
-        loading.classList.remove('loading-animation');
       }
     }
 
@@ -272,19 +269,38 @@
 
     nextButton.addEventListener('click', () => {
       loading.style.display = 'block';
-      loading.classList.add('loading-animation');
       getRandomVideo();
     });
 
     video.addEventListener('ended', getRandomVideo);
 
-    exitButton.addEventListener('click', () => {
-      if (exitButton.textContent === 'Exit') {
-        video.exitFullscreen();
-        exitButton.textContent = 'Next';
+    let isFullscreen = false;
+
+    toggleFullscreenButton.addEventListener('click', () => {
+      if (!isFullscreen) {
+        if (video.requestFullscreen) {
+          video.requestFullscreen();
+        } else if (video.mozRequestFullScreen) { /* Firefox */
+          video.mozRequestFullScreen();
+        } else if (video.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+          video.webkitRequestFullscreen();
+        } else if (video.msRequestFullscreen) { /* IE/Edge */
+          video.msRequestFullscreen();
+        }
+        toggleFullscreenButton.textContent = 'Exit';
+        isFullscreen = true;
       } else {
-        video.requestFullscreen();
-        exitButton.textContent = 'Exit';
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { /* Firefox */
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE/Edge */
+          document.msExitFullscreen();
+        }
+        toggleFullscreenButton.textContent = 'Fullscreen';
+        isFullscreen = false;
       }
     });
 
