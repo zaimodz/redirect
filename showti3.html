@@ -28,48 +28,34 @@
 
     #opening {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      opacity: 0;
+      animation: fadeInOut 2s ease-in-out forwards;
       z-index: 5;
-      animation: fadeInOut 6s ease-in-out forwards;
     }
 
     #opening h1 {
       font-size: 48px;
-      color: #1e90ff;
+      color: #ff9900; /* Lion orange color */
       text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-      animation: zoomInOut 3s ease-in-out;
     }
 
-    @keyframes zoomInOut {
+    @keyframes fadeInOut {
       0% {
-        transform: scale(0);
         opacity: 0;
       }
 
-      50% {
-        transform: scale(1.2);
+      10%, 90% {
         opacity: 1;
       }
 
       100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadeInOut {
-      0%, 100% {
-        opacity: 1;
-      }
-
-      50% {
         opacity: 0;
       }
     }
@@ -143,7 +129,7 @@
     .loader-container {
       width: 200px;
       height: 20px;
-      border: 1px solid #ddd;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       overflow: hidden;
       position: relative;
       border-radius: 5px;
@@ -213,7 +199,7 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      border: 2px solid #1e90ff;
+      border: 2px solid #ff9900; /* Lion orange color */
       top: 0;
       left: 0;
       border-radius: 50%;
@@ -272,6 +258,7 @@
     const loading = document.getElementById('loading');
     const animatedBackground = document.getElementById('animated-background');
     const nextButton = document.getElementById('next-button');
+    const opening = document.getElementById('opening');
 
     function createParticles() {
       for (let i = 0; i < 100; i++) {
@@ -289,6 +276,13 @@
 
     async function getRandomVideo() {
       try {
+        opening.style.opacity = 1; // Show opening
+        opening.style.display = 'block';
+
+        setTimeout(() => {
+          opening.style.opacity = 0; // Fade out opening
+        }, 1500);
+
         loading.style.display = 'flex'; // Show loading screen
         const url = 'https://shoti-srv1.onrender.com/api/v1/get';
         const rawResponse = await fetch(url, {
